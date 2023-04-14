@@ -19,6 +19,7 @@ main(int argc, char *argv[])
     close(p[0]);
     write(p[1], "pong\n", 5);
     close(p[1]);
+    exit(0);
   }else{
     write(p[1], "ping\n", 5);
     close(p[1]);
