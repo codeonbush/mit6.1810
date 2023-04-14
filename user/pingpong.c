@@ -14,7 +14,7 @@ main(int argc, char *argv[])
   if (fork() == 0){
     if(read(p[0], buf, 5) > 0){
         // write(1, buf, 5);
-        printf("%d: received", getpid(), buf);
+        printf("%d: received %s", getpid(), buf);
     }
     close(p[0]);
     write(p[1], "pong\n", 5);
@@ -25,7 +25,7 @@ main(int argc, char *argv[])
     if (read(p[0], buf, 5))
     {
     //    write(1, buf, 5);
-        printf("%d: received", getpid(), buf);
+        printf("%d: received %s", getpid(), buf);
     }
     close(p[0]);
   }
