@@ -20,7 +20,7 @@ main(int argc, char *argv[])
   }else{
     write(p[1], "ping\n", 5);
     close(p[1]);
-    if (read(p[0], buf, 5);)
+    if (read(p[0], buf, 5))
     {
        write(1, buf, 5);
     }
