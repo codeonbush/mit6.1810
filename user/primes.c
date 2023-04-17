@@ -16,7 +16,7 @@ main(int argc, char *argv[]){
     exit(0);
 }
 
-int
+void
 sleve(int *pl){
     int pr[2];
     int num;
