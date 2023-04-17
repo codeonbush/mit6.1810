@@ -12,12 +12,12 @@ main(int argc, char *argv[]){
         write(p[1], &i, sizeof(int));
     }
     close(p[1]);
-    sleve(p);
+    sleve_num(p);
     exit(0);
 }
 
 void
-sleve(int pl[2]){
+sleve_num(int pl[2]){
     int pr[2];
     int num;
     int prime;
@@ -28,7 +28,7 @@ sleve(int pl[2]){
         pipe(pr);
 
         if(fork() == 0){
-            sleve(pr);
+            sleve_num(pr);
         }else{
             close(pr[0]);
             while (read(pl[0], &num, sizeof(int)) > 0){
