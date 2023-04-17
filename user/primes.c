@@ -17,7 +17,7 @@ main(int argc, char *argv[]){
 }
 
 void
-sleve(int *pl){
+sleve(int pl[2]){
     int pr[2];
     int num;
     int prime;
