@@ -16,9 +16,8 @@ main(int argc, char *argv[]){
     exit(0);
 }
 
-
-int sleve(int *pl)
-{
+int
+sleve(int *pl){
     int pr[2];
     int num;
     int prime;
