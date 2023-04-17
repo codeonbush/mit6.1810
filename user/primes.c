@@ -41,6 +41,7 @@ main(int argc, char *argv[]){
     }
     close(p[1]);
     sleve_num(p);
+    wait(0);
     exit(0);
 }
 
