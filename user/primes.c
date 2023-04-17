@@ -24,7 +24,6 @@ sleve_num(int *pl){
                     write(pr[1], &num, sizeof(int));
                 }
             }
-            close(pl[0]);
             close(pr[1]);
             wait(0);
         }
@@ -39,7 +38,7 @@ main(int argc, char *argv[]){
     if(fork() == 0){
         sleve_num(p);
     }else{
-        // close(p[0]);
+        close(p[0]);
         for (int i = 2; i < MAXSIZE; i++){
             write(p[1], &i, sizeof(int));
         }
