@@ -4,20 +4,8 @@
 
 #define MAXSIZE  35
 
-int
-main(int argc, char *argv[]){
-    int p[2];
-    pipe(p);
-    for (int i = 2; i < MAXSIZE; i++){
-        write(p[1], &i, sizeof(int));
-    }
-    close(p[1]);
-    sleve_num(p);
-    exit(0);
-}
-
 void
-sleve_num(int pl[2]){
+sleve_num(int *pl){
     int pr[2];
     int num;
     int prime;
@@ -43,3 +31,16 @@ sleve_num(int pl[2]){
     }
     exit(0);
 }
+
+int
+main(int argc, char *argv[]){
+    int p[2];
+    pipe(p);
+    for (int i = 2; i < MAXSIZE; i++){
+        write(p[1], &i, sizeof(int));
+    }
+    close(p[1]);
+    sleve_num(p);
+    exit(0);
+}
+
