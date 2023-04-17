@@ -6,6 +6,7 @@
 
 void
 sleve_num(int *pl){
+    close(pl[1]);
     int pr[2];
     int num;
     int prime;
@@ -14,16 +15,16 @@ sleve_num(int *pl){
         prime = num;
         printf("prime %d\n", prime);
         pipe(pr);
-
+        close(pr[0]);
         if(fork() == 0){
             sleve_num(pr);
         }else{
-            close(pr[0]);
             while (read(pl[0], &num, sizeof(int)) > 0){
                 if(num % prime != 0){
                     write(pr[1], &num, sizeof(int));
                 }
             }
+            close(pl[0]);
             close(pr[1]);
             wait(0);
         }
