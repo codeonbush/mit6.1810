@@ -28,7 +28,6 @@ strcpy(char *s, const char *t)
 int
 strcmp(const char *p, const char *q)
 {
-  printf("%s, %s\n", p, q);
   while(*p && *p == *q)
     p++, q++;
   return (uchar)*p - (uchar)*q;
