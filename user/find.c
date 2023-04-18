@@ -91,7 +91,8 @@ find(char *path, char *target){
                 }
                 // printf("pathbuf: %s \n", buf);
                 if (strcmp(buf, dir1) != 0 && strcmp(buf, dir2) != 0){
-                    find(buf, target);
+                    char *newpath = buf;
+                    find(newpath, target);
                 }
             }
             break;
