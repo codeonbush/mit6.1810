@@ -77,7 +77,9 @@ find(char *path, char *target){
             *p++ = '/';
             while(read(fd, &de, sizeof(de)) == sizeof(de)){
                 if(de.inum == 0)
-                continue;
+                    continue;
+                if (strcmp(".", rtrim(de.name)) == 0 || strcmp("..", rtrim(de.name)) == 0)
+                    continue;
                 /**
                  * @brief The memmove() function is used to copy DIRSIZ bytes of data
                  * from the memory location pointed to by de.name to the memory location pointed to by p.
@@ -89,12 +91,9 @@ find(char *path, char *target){
                     printf("find: cannot stat %s\n", buf);
                     continue;
                 }
-                // printf("pathbuf: %s \n", buf);
-                if (strcmp(buf, dir1) != 0 && strcmp(buf, dir2) != 0){
-                    char *newpath = buf;
-                    printf("newpath: %s \n", newpath);
-                    find(newpath, target);
-                }
+                char *newpath = buf;
+                // printf("newpath: %s \n", newpath);
+                find(newpath, target);
             }
             break;
     }
