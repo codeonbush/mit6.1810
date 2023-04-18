@@ -1,8 +1,9 @@
 #include "kernel/types.h"
 #include "kernel/stat.h"
 #include "user/user.h"
+#include "kernel/fs.h"
 
-
+//格式化文件名
 char*
 fmtname(char *path)
 {
@@ -22,19 +23,16 @@ fmtname(char *path)
   return buf;
 }
 
-
-
-int
-main(int argc, char *argv[]){
+void
+find(char *path, char *target){
     int fd;
-    char *path;
     struct stat st;
-    path = argv[1];
 
-    if((fd = open(argv[1], 0)) < 0){
+    if((fd = open(path, 0)) < 0){
         fprintf(2, "find: cannot open %s\n", path);
         return;
     }
+
     if(fstat(fd, &st) < 0){
         fprintf(2, "find: cannot stat %s\n", path);
         close(fd);
@@ -44,29 +42,28 @@ main(int argc, char *argv[]){
     switch(st.type){
         case T_DEVICE:
         case T_FILE:
+        //直接匹配文件名
             printf("%s %d %d %l\n", fmtname(path), st.type, st.ino, st.size);
+            if (strcmp(fmtname(path), target) == 0){
+                printf("%s %d %d %l\n", fmtname(path), st.type, st.ino, st.size);
+            }
             break;
-
         case T_DIR:
-            // if(strlen(path) + 1 + DIRSIZ + 1 > sizeof buf){
-            printf("ls: path too long\n");
+            // while (/* condition */){
+            //     /* code */
+            // }
+            
+            // path = 0;
+            // find(path, target);
             break;
-        }
-        // strcpy(buf, path);
-        // p = buf+strlen(buf);
-        // *p++ = '/';
-        // while(read(fd, &de, sizeof(de)) == sizeof(de)){
-        // if(de.inum == 0)
-        //     continue;
-        // memmove(p, de.name, DIRSIZ);
-        // p[DIRSIZ] = 0;
-        // if(stat(buf, &st) < 0){
-        //     printf("ls: cannot stat %s\n", buf);
-        //     continue;
-        // }
-        // printf("%s %d %d %d\n", fmtname(buf), st.type, st.ino, st.size);
-        // }
-        break;
     }
     close(fd);
+    return;
+}
+
+
+int
+main(int argc, char *argv[]){
+    find(argv[1], argv[2]);
+    exit(0);
 }

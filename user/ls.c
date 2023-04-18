@@ -3,6 +3,7 @@
 #include "user/user.h"
 #include "kernel/fs.h"
 
+//格式化文件名
 char*
 fmtname(char *path)
 {
@@ -48,6 +49,7 @@ ls(char *path)
     break;
 
   case T_DIR:
+    //第一个+1为“/”，第二个+1为 0
     if(strlen(path) + 1 + DIRSIZ + 1 > sizeof buf){
       printf("ls: path too long\n");
       break;
@@ -55,6 +57,11 @@ ls(char *path)
     strcpy(buf, path);
     p = buf+strlen(buf);
     *p++ = '/';
+    /**
+     * When the read() system call is used to read from a directory file descriptor, 
+     * it reads the directory entries into a buffer, 
+     * and each directory entry is represented as an instance of the struct dirent structure. 
+    */
     while(read(fd, &de, sizeof(de)) == sizeof(de)){
       if(de.inum == 0)
         continue;
