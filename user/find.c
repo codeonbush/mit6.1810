@@ -45,6 +45,8 @@ find(char *path, char *target){
     struct dirent de;
     struct stat st;
     char *filename;
+    char* dir1 = "./.";
+    char* dir2 = "./..";
     if((fd = open(path, 0)) < 0){
         fprintf(2, "find: cannot open %s\n", path);
         return;
@@ -90,10 +92,9 @@ find(char *path, char *target){
                     continue;
                 }
                 printf("pathbuf: %s \n", buf);
-                if (strcmp(buf, "./.") == 0 && strcmp(buf, "./..") == 0){
+                if (strcmp(buf, dir1) == 0 && strcmp(buf, dir2) == 0){
                     find(buf, target);
                 }
-                
             }
             break;
     }
