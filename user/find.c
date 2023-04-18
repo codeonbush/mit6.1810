@@ -90,6 +90,10 @@ find(char *path, char *target){
                     continue;
                 }
                 printf("pathbuf: %s \n", buf);
+                if (strcmp(buf, "./.") == 0 && strcmp(buf, "./..") == 0){
+                    find(buf, target);
+                }
+                
             }
             break;
     }
