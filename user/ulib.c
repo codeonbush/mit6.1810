@@ -2,6 +2,7 @@
 #include "kernel/stat.h"
 #include "kernel/fcntl.h"
 #include "user/user.h"
+#include "defs.h"
 
 //
 // wrapper so that it's OK if main() does not call exit().
@@ -28,6 +29,7 @@ strcpy(char *s, const char *t)
 int
 strcmp(const char *p, const char *q)
 {
+  printf("%s, %s\n", p, q);
   while(*p && *p == *q)
     p++, q++;
   return (uchar)*p - (uchar)*q;

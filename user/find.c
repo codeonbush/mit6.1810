@@ -3,6 +3,21 @@
 #include "user/user.h"
 #include "kernel/fs.h"
 
+char*
+rtrim(char* path)
+{
+    static char newStr[DIRSIZ+1];
+    int whiteSpaceSize = 0;
+    int bufSize = 0;
+    for(char* p = path + strlen(path) - 1; p >= path && *p == ' '; --p) {
+        ++whiteSpaceSize;
+    }
+    bufSize = DIRSIZ - whiteSpaceSize;
+    memmove(newStr, path, bufSize);
+    newStr[bufSize] = '\0';
+    return newStr;
+}
+
 //filepath to filename
 char*
 fmtname(char *path)
@@ -20,7 +35,7 @@ fmtname(char *path)
     return p;
   memmove(buf, p, strlen(p));
   memset(buf+strlen(p), ' ', DIRSIZ-strlen(p));
-  return buf;
+  return rtrim(buf);
 }
 
 void
