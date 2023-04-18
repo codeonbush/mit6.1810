@@ -41,6 +41,8 @@ fmtname(char *path)
 void
 find(char *path, char *target){
     int fd;
+    char buf[512], *p;
+    struct dirent de;
     struct stat st;
     char *filename;
     if((fd = open(path, 0)) < 0){
@@ -65,12 +67,30 @@ find(char *path, char *target){
             }
             break;
         case T_DIR:
-            // while (/* condition */){
-            //     /* code */
-            // }
-            
-            // path = 0;
-            // find(path, target);
+            //第一个+1为“/”，第二个+1为 0
+            if(strlen(path) + 1 + DIRSIZ + 1 > sizeof buf){
+                printf("find: path too long\n");
+                break;
+            }
+            strcpy(buf, path);
+            p = buf+strlen(buf);
+            *p++ = '/';
+            while(read(fd, &de, sizeof(de)) == sizeof(de)){
+                if(de.inum == 0)
+                continue;
+                /**
+                 * @brief The memmove() function is used to copy DIRSIZ bytes of data
+                 * from the memory location pointed to by de.name to the memory location pointed to by p.
+                 * 
+                 */
+                memmove(p, de.name, DIRSIZ);
+                p[DIRSIZ] = 0;
+                if(stat(buf, &st) < 0){
+                    printf("find: cannot stat %s\n", buf);
+                    continue;
+                }
+                printf("pathbuf: %s \n", buf);
+            }
             break;
     }
     close(fd);
