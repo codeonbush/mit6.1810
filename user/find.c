@@ -38,7 +38,7 @@ find(char *path, char *target){
         close(fd);
         return;
     }
-
+    printf("%s %d %d %l\n", fmtname(path), st.type, st.ino, st.size);
     switch(st.type){
         case T_DEVICE:
         case T_FILE:
