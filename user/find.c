@@ -27,7 +27,7 @@ void
 find(char *path, char *target){
     int fd;
     struct stat st;
-
+    char *filename;
     if((fd = open(path, 0)) < 0){
         fprintf(2, "find: cannot open %s\n", path);
         return;
@@ -43,8 +43,9 @@ find(char *path, char *target){
         case T_DEVICE:
         case T_FILE:
         //直接匹配文件名
-            printf("target: %s, filepath: %s, filename: %s, cmp_result: %d", target, path, fmtname(path), strcmp(fmtname(path), target));
-            if (strcmp(fmtname(path), target) == 0){
+            filename = fmtname(path);
+            printf("path: %s, target: %s,  filename: %s, cmp: %d \n", path, target, filename, strcmp(fmtname(path), target));
+            if (strcmp(filename, target) == 0){
                 printf("%s\n", path);
             }
             break;
