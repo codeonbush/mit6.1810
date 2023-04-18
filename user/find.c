@@ -3,7 +3,7 @@
 #include "user/user.h"
 #include "kernel/fs.h"
 
-//格式化文件名
+//filepath to filename
 char*
 fmtname(char *path)
 {
@@ -38,14 +38,14 @@ find(char *path, char *target){
         close(fd);
         return;
     }
-    printf("%s %d %d %l\n", fmtname(path), st.type, st.ino, st.size);
+
     switch(st.type){
         case T_DEVICE:
         case T_FILE:
         //直接匹配文件名
-            printf("%s %d %d %l\n", fmtname(path), st.type, st.ino, st.size);
+            printf("target: %s, filepath: %s, filename: %s, cmp_result: %d", target, path, fmtname(path), strcmp(fmtname(path), target));
             if (strcmp(fmtname(path), target) == 0){
-                printf("%s %d %d %l\n", fmtname(path), st.type, st.ino, st.size);
+                printf("%s\n", path);
             }
             break;
         case T_DIR:
