@@ -61,7 +61,6 @@ find(char *path, char *target){
     switch(st.type){
         case T_DEVICE:
         case T_FILE:
-        //直接匹配文件名
             filename = fmtname(path);
             printf("path: %s, target: %s,  filename: %s, cmp: %d \n", path, target, filename, strcmp(fmtname(path), target));
             if (strcmp(filename, target) == 0){
@@ -69,7 +68,6 @@ find(char *path, char *target){
             }
             break;
         case T_DIR:
-            //第一个+1为“/”，第二个+1为 0
             if(strlen(path) + 1 + DIRSIZ + 1 > sizeof buf){
                 printf("find: path too long\n");
                 break;
@@ -92,7 +90,7 @@ find(char *path, char *target){
                     continue;
                 }
                 printf("pathbuf: %s \n", buf);
-                if (strcmp(buf, dir1) == 0 && strcmp(buf, dir2) == 0){
+                if (strcmp(buf, dir1) != 0 && strcmp(buf, dir2) != 0){
                     find(buf, target);
                 }
             }
