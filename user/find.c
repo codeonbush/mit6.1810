@@ -62,7 +62,7 @@ find(char *path, char *target){
         case T_DEVICE:
         case T_FILE:
             filename = fmtname(path);
-            printf("path: %s, target: %s,  filename: %s, cmp: %d \n", path, target, filename, strcmp(fmtname(path), target));
+            // printf("path: %s, target: %s,  filename: %s, cmp: %d \n", path, target, filename, strcmp(fmtname(path), target));
             if (strcmp(filename, target) == 0){
                 printf("%s\n", path);
             }
@@ -89,7 +89,7 @@ find(char *path, char *target){
                     printf("find: cannot stat %s\n", buf);
                     continue;
                 }
-                printf("pathbuf: %s \n", buf);
+                // printf("pathbuf: %s \n", buf);
                 if (strcmp(buf, dir1) != 0 && strcmp(buf, dir2) != 0){
                     find(buf, target);
                 }
