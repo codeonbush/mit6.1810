@@ -1,69 +1,59 @@
 #include "kernel/types.h"
 #include "kernel/stat.h"
 #include "user/user.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
+#include "kernel/param.h"
 
-// int
-// main(int argc, char *argv[])
-// {
-//     if(argc < 2){
-//         fprintf(2, "xargs error \n");
-//         exit(1);
-//     }
-//     //区分两个命令
-//     char *first_commond[MAXARG];
-//     for (int i = 0; i < ; i++)
-//     {
-//         /* code */
-//     }
-    
-//     exit(0);
-// }
+#define MAXLEN 128
 
-#define MAX_ARGS 100
+int
+main(int argc, char *argv[])
+{
+  if (argc < 2) {
+    fprintf(2, "Usage: xargs cmd...\n");
+    exit(1);
+  }
 
-int main(int argc, char *argv[]) {
-    char *cmd[MAX_ARGS];
-    char buf[1024];
-    int i;
+  char *args[MAXARG];
 
-    // Make sure we have at least one argument (the command to run)
-    if (argc < 2) {
-        fprintf(stderr, "Usage: %s cmd [args...]\n", argv[0]);
+  for (int i=1; i<argc; i++) {
+    args[i - 1] = malloc(strlen(argv[i]) + 1);
+    strcpy(args[i - 1], argv[i]);
+  }
+
+  int count = argc - 1;
+  char* buf = malloc(MAXLEN);
+  int i = 0;
+
+  while(read(0, buf + i, 1) > 0) {
+    if (buf[i] == ' ') {
+      buf[i] = 0;
+      args[count++] = buf;
+      buf = malloc(MAXLEN);
+      i = 0;
+    } else if (buf[i] == '\n') {
+      buf[i] = 0;
+      args[count] = buf;
+      args[count + 1] = 0;
+      if (fork() == 0) {
+        exec(args[0], args);
         exit(1);
+      } else {
+        wait(0);
+      }
+      for (i = argc - 1; i <= count; i++) {
+        free(args[i]);
+      }
+      count = argc - 1;
+      buf = malloc(MAXLEN);
+      i = 0;
+    } else {
+      i++;
     }
+  }
 
-    // Copy the command and its arguments into an array
-    for (i = 0; i < argc - 1 && i < MAX_ARGS - 1; i++) {
-        cmd[i] = argv[i + 1];
-    }
-    cmd[i] = NULL;
-
-    // Read lines from standard input and execute the command for each line
-    while (fgets(buf, sizeof(buf), stdin)) {
-        // Remove trailing newline
-        buf[strcspn(buf, "\n")] = '\0';
-
-        // Append the line to the command's arguments
-        cmd[i++] = buf;
-        cmd[i] = NULL;
-
-        // Execute the command with its new arguments
-        if (fork() == 0) {
-            execvp(cmd[0], cmd);
-            perror("execvp");
-            exit(1);
-        }
-
-        // Wait for the child process to finish
-        wait(NULL);
-
-        // Remove the line from the command's arguments
-        cmd[--i] = NULL;
-    }
-
-    return 0;
+  for (i = 0; i < argc - 1; i++) {
+    free(args[i]);
+  }
+  
+  exit(0);
 }
