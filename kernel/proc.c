@@ -296,6 +296,9 @@ fork(void)
   }
   np->sz = p->sz;
 
+  //copy the trace mask from the parent to the child process
+  np->trace_calls = p->trace_calls;
+
   // copy saved user registers.
   *(np->trapframe) = *(p->trapframe);
 

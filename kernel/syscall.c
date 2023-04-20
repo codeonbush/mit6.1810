@@ -128,6 +128,58 @@ static uint64 (*syscalls[])(void) = {
 [SYS_close]   sys_close,
 };
 
+static char *syscall_names[] = {
+[SYS_fork]    "fork",
+[SYS_exit]    "exit",
+[SYS_wait]    "wait",
+[SYS_pipe]    "pipe",
+[SYS_read]    "read",
+[SYS_kill]    "kill",
+[SYS_exec]    "exec",
+[SYS_fstat]   "fstat",
+[SYS_chdir]   "chdir",
+[SYS_dup]     "dup",
+[SYS_getpid]  "getpid",
+[SYS_sbrk]    "sbrk",
+[SYS_sleep]   "sleep",
+[SYS_uptime]  "uptime",
+[SYS_open]    "open",
+[SYS_write]   "write",
+[SYS_mknod]   "mknod",
+[SYS_unlink]  "unlink",
+[SYS_link]    "link",
+[SYS_mkdir]   "mkdir",
+[SYS_close]   "close",
+[SYS_trace]   "trace",
+// [SYS_sysinfo] "sysinfo",
+};
+
+static int syscall_masks[] = {
+[SYS_fork]    1 << SYS_fork,
+[SYS_exit]    1 << SYS_exit,
+[SYS_wait]    1 << SYS_wait,
+[SYS_pipe]    1 << SYS_pipe,
+[SYS_read]    1 << SYS_read,
+[SYS_kill]    1 << SYS_kill,
+[SYS_exec]    1 << SYS_exec,
+[SYS_fstat]   1 << SYS_fstat,
+[SYS_chdir]   1 << SYS_chdir,
+[SYS_dup]     1 << SYS_dup,
+[SYS_getpid]  1 << SYS_getpid,
+[SYS_sbrk]    1 << SYS_sbrk,
+[SYS_sleep]   1 << SYS_sleep,
+[SYS_uptime]  1 << SYS_uptime,
+[SYS_open]    1 << SYS_open,
+[SYS_write]   1 << SYS_write,
+[SYS_mknod]   1 << SYS_mknod,
+[SYS_unlink]  1 << SYS_unlink,
+[SYS_link]    1 << SYS_link,
+[SYS_mkdir]   1 << SYS_mkdir,
+[SYS_close]   1 << SYS_close,
+[SYS_trace]   1 << SYS_trace,
+// [SYS_sysinfo] 1 << SYS_sysinfo,
+};
+
 void
 syscall(void)
 {
@@ -139,6 +191,9 @@ syscall(void)
     // Use num to lookup the system call function for num, call it,
     // and store its return value in p->trapframe->a0
     p->trapframe->a0 = syscalls[num]();
+    if (p->trace_calls & syscall_masks[num]) {
+      printf("%d: syscall %s -> %d\n", p->pid, syscall_names[num], p->trapframe->a0);
+    }
   } else {
     printf("%d %s: unknown sys call %d\n",
             p->pid, p->name, num);
