@@ -153,7 +153,7 @@ static char *syscall_names[] = {
 [SYS_mkdir]   "mkdir",
 [SYS_close]   "close",
 [SYS_trace]   "trace",
-// [SYS_sysinfo] "sysinfo",
+[SYS_sysinfo] "sysinfo",
 };
 
 static int syscall_masks[] = {
@@ -179,7 +179,7 @@ static int syscall_masks[] = {
 [SYS_mkdir]   1 << SYS_mkdir,
 [SYS_close]   1 << SYS_close,
 [SYS_trace]   1 << SYS_trace,
-// [SYS_sysinfo] 1 << SYS_sysinfo,
+[SYS_sysinfo] 1 << SYS_sysinfo,
 };
 
 void
