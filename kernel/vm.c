@@ -21,7 +21,9 @@ kvmmake(void)
 {
   pagetable_t kpgtbl;
 
+  //allocates a page of physical memory to hold the root page-table page.
   kpgtbl = (pagetable_t) kalloc();
+  //set 4096 0s
   memset(kpgtbl, 0, PGSIZE);
 
   // uart registers
@@ -91,7 +93,7 @@ walk(pagetable_t pagetable, uint64 va, int alloc)
   for(int level = 2; level > 0; level--) {
     pte_t *pte = &pagetable[PX(level, va)];
     if(*pte & PTE_V) {
-      pagetable = (pagetable_t)PTE2PA(*pte);
+      pagetable = (pagetable_t)PTE2PA(*pte);//change to the low-level page
     } else {
       if(!alloc || (pagetable = (pde_t*)kalloc()) == 0)
         return 0;
